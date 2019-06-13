@@ -70,7 +70,7 @@ Try {
 	[string]$appLang = 'EN'
 	[string]$appRevision = '01'
 	[string]$appScriptVersion = '3.7.0.1'
-	[string]$appScriptDate = '06/10/2018'
+	[string]$appScriptDate = '06/10/2019'
 	[string]$appScriptAuthor = 'Steve Patterson'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
@@ -128,9 +128,13 @@ Try {
 		## Uninstalls previous versions
 		If ( Test-Path "$envProgramFiles\MATLAB\R2017a") {
 				Execute-Process -Path "$envProgramFiles\MATLAB\R2017a\uninstall\bin\win64\uninstall.exe" -Parameters "-inputFile `"$dirSupportFiles\2017uninstaller_input.txt`"" -PassThru
+                Get-ChildItem -Path "$envProgramFiles\MATLAB\R2017a" -Recurse | Remove-Item -force -recurse
+				Remove-Item "$envProgramFiles\MATLAB\R2017a" -Force
 		}
 		If ( Test-Path "$envProgramFiles\MATLAB\R2018a") {
 				Execute-Process -Path "$envProgramFiles\MATLAB\R2018a\uninstall\bin\win64\uninstall.exe" -Parameters "-inputFile `"$dirSupportFiles\2018uninstaller_input.txt`"" -PassThru
+                Get-ChildItem -Path "$envProgramFiles\MATLAB\R2018a" -Recurse | Remove-Item -force -recurse
+				Remove-Item "$envProgramFiles\MATLAB\R2018a" -Force
 		}
 		## Cleans up a 2019 install that did not complete so it can reinstall
 		If ( Test-Path "$envProgramFiles\MATLAB\R2019a") {
@@ -203,7 +207,10 @@ Try {
 
 		# <Perform Uninstallation tasks here>
 		$exitCode = Execute-Process -Path "$envProgramFiles\MATLAB\R2019a\uninstall\bin\win64\uninstall.exe" -Parameters "-inputFile `"$dirSupportFiles\uninstaller_input.txt`"" -PassThru
-		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
+		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { 
+                $mainExitCode = $exitCode.ExitCode 
+        }
+
 
 		##*===============================================
 		##* POST-UNINSTALLATION
@@ -211,7 +218,8 @@ Try {
 		[string]$installPhase = 'Post-Uninstallation'
 
 		## <Perform Post-Uninstallation tasks here>
-
+                Get-ChildItem -Path "$envProgramFiles\MATLAB\R2019a" -Recurse | Remove-Item -force -recurse
+		        Remove-Item "$envProgramFiles\MATLAB\R2019a" -Force
 
 	}
 
@@ -233,8 +241,8 @@ Catch {
 # SIG # Begin signature block
 # MIIOaQYJKoZIhvcNAQcCoIIOWjCCDlYCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU9TGIcyhlOIy1A/s0Gmg2Cv92
-# mzWggguhMIIFrjCCBJagAwIBAgIQBwNx0Q95WkBxmSuUB2Kb4jANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUdE2geEsxnYYkH8ZO2O0bR4Nx
+# S3OggguhMIIFrjCCBJagAwIBAgIQBwNx0Q95WkBxmSuUB2Kb4jANBgkqhkiG9w0B
 # AQsFADB8MQswCQYDVQQGEwJVUzELMAkGA1UECBMCTUkxEjAQBgNVBAcTCUFubiBB
 # cmJvcjESMBAGA1UEChMJSW50ZXJuZXQyMREwDwYDVQQLEwhJbkNvbW1vbjElMCMG
 # A1UEAxMcSW5Db21tb24gUlNBIENvZGUgU2lnbmluZyBDQTAeFw0xODA2MjEwMDAw
@@ -301,11 +309,11 @@ Catch {
 # BAsTCEluQ29tbW9uMSUwIwYDVQQDExxJbkNvbW1vbiBSU0EgQ29kZSBTaWduaW5n
 # IENBAhAHA3HRD3laQHGZK5QHYpviMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEM
 # MQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQB
-# gjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQiQwsOd7zu1Wyk
-# /WtFrmva2II2xTANBgkqhkiG9w0BAQEFAASCAQBD/nXcE9GunFk9b/B7UEUTzWM9
-# 2FpkYI0ARF8vOZnPjdWedLSeDOY0qLTFrpOmSMEwgFE8FWKwnE+ICa5SLz/4eGy/
-# 0jkXQCfPNp8tiaDAq2nXEebpzjfAagj4GYSRPWsbpqzPoFG0ObIMipYNqN/DpTcV
-# fG6g5JNQ0S0qG2Sm5avygWUzbVPtImLF4V6lePqa1RBHw5RCXZwIt0hRajD6efSc
-# pZISw72sUKI1q7OJA0rYxMY/8E5RK6LVu1ew6AOciegzJLiw6XWoGk76gxZh6G9c
-# FTzW7rjQ3erIbiP98wmO/WEEHNq7yrGMPMq8UOKYNOGaHVlwOeufDpWVLChC
+# gjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRE4Jdb3HVsCGEp
+# o1gewEuofqwdETANBgkqhkiG9w0BAQEFAASCAQBcYQu6uhyZTT3CflnrDysd6WYb
+# NCuy3kQQ67m4+rxuEl1NZNjmPGM5BnAZe6O2u4ws01zMnI9dKB71u+jPtbE8g0eC
+# p1/NYezmhbzw3vTdyahq4aVO5cmX2yjpwCObE+PoWXCaHeDWQxbTo60syqkqFxjl
+# XjgjNKIcxcHeAQV9ks4ffNnoG8zp3Aru0ars9lEWIrYwr/GAJ/SPp8o1JnkCIKFc
+# XlIktqi/buncnQfJmOxVLyVNomWLrOrEVcPOb7OJoak3CGd2t+cHPDZPG7v6IOqt
+# cpJ3lnjZBqsfjL2E8dKcICodiknSIIhVc9yUbqw+NoiFUNtPu7AX6gAcSTam
 # SIG # End signature block
